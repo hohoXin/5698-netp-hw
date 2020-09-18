@@ -1,5 +1,5 @@
 #
-#  [2019] Signet Lab - Programming for ICT
+#  [2022] Signet Lab - Programming for ICT
 #  All Rights Reserved.
 #
 #  Authors Filippo Campagnaro and Michele Polese 
@@ -33,7 +33,8 @@ AC_ARG_WITH([test],
   [with_test="$withval"],
   [with_test=""])
 
-PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'-I$(top_srcdir)/examples/homework_1'
+
+PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'-I$(top_srcdir)/examples/final'
 PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'$(GCC6_FLAG)'
 
 PFICT_CXXFLAGS="$PFICT_CXXFLAGS "'-Wall'
@@ -62,7 +63,7 @@ AC_SUBST(with_test)
 AC_CONFIG_FILES([
   Makefile
   m4/Makefile
-  examples/homework_1/Makefile
+  examples/final/Makefile
   ])
 
 AC_OUTPUT
