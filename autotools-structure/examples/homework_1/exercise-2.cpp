@@ -8,6 +8,9 @@
 
 // remember to use the relevant #include
 
+// the binary generated from this C++ code should be called
+// with at least one extra command line argument
+// for example: /path/to/bin/exercise_2 extra_argument
 int main (int argc, char* argv[])
 {
 	// declare an array of C-style strings (i.e., string literals) 
