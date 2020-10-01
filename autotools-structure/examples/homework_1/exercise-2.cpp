@@ -10,6 +10,10 @@
 
 int main (int argc, char* argv[])
 {
+	if (argc == 1) {
+		return 0;
+	}
+
 	const int size = argc - 1;
 	// declare an array of C-style strings (i.e., string literals) 
 	// which should contain the command-line arguments, except for the
