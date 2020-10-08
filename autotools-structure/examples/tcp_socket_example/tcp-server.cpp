@@ -5,7 +5,6 @@
  * Author Michele Polese 
 */
 
-// These are the includes you need 
 #include <string.h>
 #include <netinet/tcp.h>
 #include <arpa/inet.h>
@@ -16,21 +15,28 @@
 #include <cmath>
 
 /**
- * Method to invert the elements of the buffer
+ * Method to revert the elements of the buffer
  * @param buf the buffer
  * @param size the number of elements in the buffer
  */
-void invertBuffer(char* buf, size_t size) 
+void revertBuffer(char* buf, size_t size) 
 {
-  // exercise 11 (optional - do it at the end)
-  // if the buf contains "abcd\0", it should contain "dcba\0" after running this function
   // suggestions: 
   // - use a for loop that iterates up to half of the size of the string (not considering the last termination char) 
   // - use a temporary char variable
   // - debug by printing your results at each cycle iteration
   // - pay attention to the index
   //   Do not place buffer[size - 1] as first, because this is a 
-  //   zero-terminated string
+  //   zero-terminated string..
+
+  size_t net_size {size - 2}; // we do not want to consider the termination character
+  for(size_t index = 0; index < std::floor(net_size / 2); ++index)
+  {
+    char tmp = buf[index]; // save into a temporary char
+    buf[index] = buf[net_size - index]; // swap
+    buf[net_size - index] = tmp; // swap
+  }
+
 }
 
 int main(int argc, char** argv) {
@@ -39,67 +45,98 @@ int main(int argc, char** argv) {
   // counter (argc), i.e.,
   //   ./tcp_server has argc = 1 and no command line arguments
   //   ./tcp_server 55556 has argc = 2 and the socket port as argument
+  const int listen_port = argc ==1 ? 55555 : atoi(argv[1]);
 
-  // exercise 1: declare a variable listen_port of type const int, which is
-  // 55555 if no argument is provided, or the argument otherwise
-  
-  // exercise 2: open a SOCK_STREAM (TCP) socket and save the file descriptor
-  // in an int variable scklist
-  // check if the operation is successful, if not, print an error, close the socket and return
+  // open a SOCK_STREAM (TCP) socket
+  int scklist = socket(AF_INET, SOCK_STREAM, 0);
+  if (scklist < 0){ 
+    std::cout << "ERROR: OPEN SOCKET " << scklist << std::endl;
+    close(scklist);
+    return -1;
+  }
+  // set socket options to release the socket address immediately after 
+  // the socket is closed
+  int option(1);
+  setsockopt(scklist, SOL_SOCKET, SO_REUSEADDR, 
+                  (char*)&option, sizeof(option));
+  struct sockaddr_in my_addr = {0}; // set all elements of the struct to 0
+  my_addr.sin_family = AF_INET; // address family is AF_INET (IPV4)
 
-  // exercise 3: set socket options to release the socket address immediately after 
-  // the socket is closed, so that it can be immediately reused (see SO_REUSEADDR and setsockopt)
-  
-  // exercise 4
-  // declare and set to 0 a struct called my_addr and of type struct sockaddr_in 
-  // then set the field sin_family of my_addr to AF_INET, the sin_port to listen_port
-  // and the sin_addr.s_addr to INADDR_ANY (remember the conversions from network to host)
-  
-  // exercise 5
-  // bind the socket to my_addr using the bind API
-  // check if the bind is successful, if not, print an error, close the socket and return
- 
-  // exercise 6: set scklist in a listening state, using the listen API (with at most 1 client)
-  // check if the listen is successful, if not, print an error, close the socket and return
+  // convert listener_port to network number format
+  my_addr.sin_port = htons(listen_port); 
+  // accept connection from all interfaces of the Network Interface Card (NIC)
+  my_addr.sin_addr.s_addr = htonl(INADDR_ANY); 
+  // bind the socket to the port
+  if (bind(scklist,(struct sockaddr*)&my_addr, sizeof(my_addr)) < 0) { 
+    std::cout << "ERROR: BIND SOCKET" << std::endl;
+    close(scklist);
+    return -2;
+  }
 
-  // exercise 7
-  // declare a struct called client_addr and of type struct sockaddr_in
-  // declare a variable addr_l of type socklen_t, and initialize it with 
-  // the size of srcaddr (you can use sizeof)
+  // Accept at max 1 client at a time: by changing 1 to 5 in the next line 
+  // you accept at most the connection of 5 clients in parallel.
+  if (listen(scklist, 1) < 0) { 
+    std::cout << "ERROR: LISTEN SOCKET" << std::endl;
+    close(scklist);
+    return -3;
+  }
 
-  // exercise 8
-  // performs these 3 operations using the accept API on scklist:
-  // 1) accept the connection of a new client.
-  // 2) create a new socket (called sockfd) used to perform the actual data transmission 
-  //    between client ad server.
-  // 3) save into client_addr the address of the client connected, so you 
+  struct sockaddr_in client_addr;
+  socklen_t addr_l = sizeof(client_addr);
+
+  // the next line does 3 operations:
+  // 1) it accepts the connection of a new client.
+  // 2) it creates a new socket used to perform the actual data transmission 
+  //    between client ad server. If the socket creation fails, it returns -1.
+  // 3) it Saves into client_addr the address of the client connected, so you 
   //    can know who is sending what.
-  // check if the accept is successful, if not, print an error, close the socket(s) and return
+  int sockfd = accept(scklist, (struct sockaddr*) &client_addr, &addr_l);
+  if(sockfd < 0) {
+    std::cout << "ERROR: ACCEPT CONNECTION" << std::endl;
+    close(sockfd);
+    close(scklist);
+    return -4;
+  }
 
-  // exercise 8
-  // use inet_ntoa on the member sin_addr of client_addr to get the IP address in 
-  // the dotted decimanl notation, in a const char* variable, and print to the terminal
+  // The next line prints the client address, converting to char* 
+  // the network address (inet_ntoa)
+  std::cout << "New connection from " << inet_ntoa(client_addr.sin_addr) << std::endl; 
 
-  // exercise 9: receive from sockfd
-  // create a buffer called buf, with max_size set to 256
-  // receive with recv on sockfd, and save the received amount of bytes in rcv_size
-  // check if the recv is successful, if not, print an error, close the socket(s) and return
-  // print the received buffer and size
+  // receive from sockfd
+  const size_t max_size = 256;
+  char buf[max_size] = {0};
+
+  int rcv_size = recv(sockfd, buf, max_size, 0);
+  if(rcv_size < 0) {
+    std::cout << "ERROR: RECV" << std::endl;
+    close(sockfd);
+    close(scklist);
+    return -5;
+  }
+  std::cout << "Received: " << buf << std::endl;
+  std::cout << "Size: " << rcv_size << std::endl;
   
   /**
-   * exercise 10
    * send back to the client whatever you received, 
-   * - first try without modifying (i.e., as it is) 
+   * - first try without modifing (i.e., as it is) 
    * - then (optional) by inverting the buffer order, implementing 
-   *   the function void invertBuffer(char* buf,size_t size)
+   *   the function void revertBuffer(char* buf,size_t size)
    */
 
-  // call invert buffer (uncomment this line when you want to test the implementation)
-  // invertBuffer(buf,rcv_size);
+  // call revert buffer
+  revertBuffer(buf,rcv_size);
+ 
+  // call the send API and check if the sent size if larger than 0
+  int sent_size = send(sockfd, buf, rcv_size, 0);
+  if(sent_size < 0)
+  {
+    std::cout << "ERROR: SEND" << std::endl;
+    close(sockfd);
+    close(scklist);
+    return -6;
+  }
 
-  // call the send API on sockfd
-  // check if the send is successful, if not, print an error, close the socket(s) and return
-
-  // exercise 11: close the sockets
-
+  // close the sockets
+  close(sockfd);
+  close(scklist);
 }
