@@ -15,11 +15,11 @@
 #include <cmath>
 
 /**
- * Method to revert the elements of the buffer
+ * Method to invert the elements of the buffer
  * @param buf the buffer
  * @param size the number of elements in the buffer
  */
-void revertBuffer(char* buf, size_t size) 
+void invertBuffer(char* buf, size_t size) 
 {
   // suggestions: 
   // - use a for loop that iterates up to half of the size of the string (not considering the last termination char) 
@@ -120,11 +120,11 @@ int main(int argc, char** argv) {
    * send back to the client whatever you received, 
    * - first try without modifing (i.e., as it is) 
    * - then (optional) by inverting the buffer order, implementing 
-   *   the function void revertBuffer(char* buf,size_t size)
+   *   the function void invertBuffer(char* buf,size_t size)
    */
 
-  // call revert buffer
-  revertBuffer(buf,rcv_size);
+  // call invert buffer
+  invertBuffer(buf,rcv_size);
  
   // call the send API and check if the sent size if larger than 0
   int sent_size = send(sockfd, buf, rcv_size, 0);
