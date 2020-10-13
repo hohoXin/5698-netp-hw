@@ -24,7 +24,29 @@ int main(int argc, char** argv) {
   //   ./proxy 55556 55557 has argc = 3 and the tcp_server port and udp_client port as argument
   
   const int listen_port = argc == 1 ? 55555 : atoi(argv[1]);
-  const int udp_port = argc <= 2 ? 55555 : atoi(argv[2]);
+  const int udp_port = argc <= 2 ? 55556 : atoi(argv[2]);
+  
+  //Opening UDP client
+  struct sockaddr_in servaddr; 
+  
+  // Creating socket file descriptor 
+  int sockfd_udp;
+  if ( (sockfd_udp = socket(AF_INET, SOCK_DGRAM, 0)) < 0 ) { 
+      perror("socket creation failed"); 
+      return -6; 
+  } 
+
+  memset(&servaddr, 0, sizeof(servaddr)); 
+    
+  // Filling server information 
+  servaddr.sin_family = AF_INET; 
+  servaddr.sin_port = htons(udp_port); 
+  //servaddr.sin_addr.s_addr = htonl(INADDR_ANY); 
+if (inet_pton(AF_INET, "127.0.0.1", &servaddr.sin_addr) <= 0) { 
+    std::cout << "ERROR CONVERTING IP TO INTERNET ADDR" << std::endl;
+    close(sockfd_udp); // if conversion fail, close the socket and return error -2
+    return -2;
+  }
   // open a SOCK_STREAM (TCP) socket
   int scklist = socket(AF_INET, SOCK_STREAM, 0);
   if (scklist < 0){ 
@@ -84,39 +106,28 @@ int main(int argc, char** argv) {
   const size_t max_size = 256;
   char buf[max_size] = {0};
 
-  int rcv_size = recv(sockfd, buf, max_size, 0);
-  if(rcv_size < 0) {
-    std::cout << "ERROR: RECV" << std::endl;
-    close(sockfd);
-    close(scklist);
-    return -5;
+  while(1){
+    memset(buf, 0, sizeof(buf)); 
+    int rcv_size = recv(sockfd, buf, max_size, 0);
+    if(rcv_size < 0) {
+      std::cout << "ERROR: RECV" << std::endl;
+      close(sockfd);
+      close(scklist);
+      return -5;
+    }
+    std::cout << "Received: " << buf << std::endl;
+    std::cout << "Size: " << rcv_size << std::endl;
+    /////////---------UDP Client sending data----------//////////
+
+
+    sendto(sockfd_udp, (const char *)buf, strlen(buf), MSG_CONFIRM, 
+      (const struct sockaddr *) &servaddr, sizeof(servaddr)); 
+
+    printf("message sent to udp server.\n"); 
   }
-  std::cout << "Received: " << buf << std::endl;
-  std::cout << "Size: " << rcv_size << std::endl;
-  close(sockfd);
-  close(scklist);
-  /////////---------UDP Client----------//////////
-
-  struct sockaddr_in servaddr; 
-  
-  // Creating socket file descriptor 
-  if ( (sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0 ) { 
-      perror("socket creation failed"); 
-      return -6; 
-  } 
-
-  memset(&servaddr, 0, sizeof(servaddr)); 
-    
-  // Filling server information 
-  servaddr.sin_family = AF_INET; 
-  servaddr.sin_port = htons(udp_port); 
-  servaddr.sin_addr.s_addr = htonl(INADDR_ANY); 
-    
-  sendto(sockfd, (const char *)buf, strlen(buf), MSG_CONFIRM, 
-    (const struct sockaddr *) &servaddr, sizeof(servaddr)); 
-
-  printf("message sent to udp server.\n"); 
-  
   // close the sockets
   close(sockfd);
+    close(scklist);
+
+  close(sockfd_udp);
 }
