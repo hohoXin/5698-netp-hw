@@ -2,7 +2,7 @@
  * [2020] Northeastern University - Network Programming
  * All Rights Reserved.
  * 
- * Author Michele Polese 
+ * Author Michele Polese and Pragadeesh Nithyakumar
 */
 
 #include <string.h>
@@ -14,40 +14,17 @@
 #include <iostream>
 #include <cmath>
 
-#define UDP_PORT 55555
-/**
- * Method to invert the elements of the buffer
- * @param buf the buffer
- * @param size the number of elements in the buffer
-void invertBuffer(char* buf, size_t size) 
-{
-  // suggestions: 
-  // - use a for loop that iterates up to half of the size of the string (not considering the last termination char) 
-  // - use a temporary char variable
-  // - debug by printing your results at each cycle iteration
-  // - pay attention to the index
-  //   Do not place buffer[size - 1] as first, because this is a 
-  //   zero-terminated string..
-
-  size_t net_size {size - 2}; // we do not want to consider the termination character
-  for(size_t index = 0; index < std::floor(net_size / 2); ++index)
-  {
-    char tmp = buf[index]; // save into a temporary char
-    buf[index] = buf[net_size - index]; // swap
-    buf[net_size - index] = tmp; // swap
-  }
-
-}
- */
 
 int main(int argc, char** argv) {
 
   // READ from argv the command line argument vector, by checking the arguments
   // counter (argc), i.e.,
-  //   ./tcp_server has argc = 1 and no command line arguments
-  //   ./tcp_server 55556 has argc = 2 and the socket port as argument
-  const int listen_port = argc ==1 ? 55555 : atoi(argv[1]);
-
+  //   ./proxy has argc = 1 and no command line arguments
+  //   ./proxy 55556 has argc = 2 and the tcp_server port as argument
+  //   ./proxy 55556 55557 has argc = 3 and the tcp_server port and udp_client port as argument
+  
+  const int listen_port = argc == 1 ? 55555 : atoi(argv[1]);
+  const int udp_port = argc <= 2 ? 55555 : atoi(argv[2]);
   // open a SOCK_STREAM (TCP) socket
   int scklist = socket(AF_INET, SOCK_STREAM, 0);
   if (scklist < 0){ 
@@ -132,47 +109,14 @@ int main(int argc, char** argv) {
     
   // Filling server information 
   servaddr.sin_family = AF_INET; 
-  servaddr.sin_port = htons(UDP_PORT); 
-  servaddr.sin_addr.s_addr = INADDR_ANY; 
+  servaddr.sin_port = htons(udp_port); 
+  servaddr.sin_addr.s_addr = htonl(INADDR_ANY); 
     
-    
-  sendto(sockfd, (const char *)buf, strlen(buf), 
-      MSG_CONFIRM, (const struct sockaddr *) &servaddr,  
-          sizeof(servaddr)); 
+  sendto(sockfd, (const char *)buf, strlen(buf), MSG_CONFIRM, 
+    (const struct sockaddr *) &servaddr, sizeof(servaddr)); 
+
   printf("message sent to udp server.\n"); 
   
-  /*      
-  int n, len; 
-  n = recvfrom(sockfd, (char *)buffer, MAXLINE,  
-              MSG_WAITALL, (struct sockaddr *) &servaddr, 
-              &len); 
-  buffer[n] = '\0'; 
-  printf("Server : %s\n", buffer); 
-*/
-  //close(sockfd); 
-
-
-  /**
-   * send back to the client whatever you received, 
-   * - first try without modifing (i.e., as it is) 
-   * - then (optional) by inverting the buffer order, implementing 
-   *   the function void invertBuffer(char* buf,size_t size)
-   
-
-  // call invert buffer
-  invertBuffer(buf,rcv_size);
- 
-  // call the send API and check if the sent size if larger than 0
-  int sent_size = send(sockfd, buf, rcv_size, 0);
-  if(sent_size < 0)
-  {
-    std::cout << "ERROR: SEND" << std::endl;
-    close(sockfd);
-    close(scklist);
-    return -6;
-  }
-  */
-
   // close the sockets
   close(sockfd);
 }

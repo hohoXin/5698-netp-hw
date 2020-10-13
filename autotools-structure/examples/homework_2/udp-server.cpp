@@ -13,17 +13,6 @@
 #include <unistd.h>
 #include <iostream>
 
-/**
- * Method to replace the buffer with capital letters
- * @param buf the buffer
- * @param size the number of elements in the buffer
- 
-void toUpper(char* buf, size_t size) {
-  for (size_t index = 0; index < size; ++index) {
-    buf[index] = toupper(buf[index]);
-  }
-}
-*/
 
 int main(int argc, char** argv) {
 
@@ -67,16 +56,6 @@ int main(int argc, char** argv) {
   char* ip = inet_ntoa(srcaddr.sin_addr);
   std::cout << ip << std::endl;
   std::cout << buffer << std::endl; 
-  
-  /*
-  toUpper(buffer,size);
-  
-  int sent_size = sendto(sckfd, buffer, size, 0, (struct sockaddr *) &srcaddr, addrlen);
-  if (sent_size < 0) {
-    close(sckfd);
-    return -3;
-  }
-  */
 
   close(sckfd);
 }

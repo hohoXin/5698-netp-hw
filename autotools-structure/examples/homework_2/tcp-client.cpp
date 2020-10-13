@@ -71,18 +71,8 @@ int main(int argc, char** argv)
   }
 
   // set buffer to zero for next read
-  memset(buf, 0, max_size);
-  /*
-  // wait to receive data
-  int rcv_size = recv(sckfd,buf,max_size,0);
-  if(rcv_size < 0) {
-    std::cout << "ERROR: RECV" << std::endl;
-    close(sckfd);
-    //close(scklist);
-    return -5;
-  }
-  std::cout << buf << std::endl;
-  */
+ // memset(buf, 0, max_size);
+ 
   // close the socket
   close(sckfd);
 }
