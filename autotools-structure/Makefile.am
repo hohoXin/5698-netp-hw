@@ -9,6 +9,7 @@ AUTOMAKE_OPTIONS = foreign
 
 SUBDIRS = m4 \
     examples/homework_1 \
+    examples/homework_2 \
     examples/socket_example \
     examples/tcp_socket_example
 

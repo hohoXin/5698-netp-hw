@@ -65,6 +65,7 @@ AC_CONFIG_FILES([
   Makefile
   m4/Makefile
   examples/homework_1/Makefile
+  examples/homework_2/Makefile
   examples/socket_example/Makefile
   examples/tcp_socket_example/Makefile
   ])
