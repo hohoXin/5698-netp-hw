@@ -34,6 +34,7 @@ AC_ARG_WITH([test],
   [with_test=""])
 
 PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'-I$(top_srcdir)/examples/homework_1'
+PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'-I$(top_srcdir)/examples/homework_2'
 PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'-I$(top_srcdir)/examples/socket_example'
 PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'-I$(top_srcdir)/examples/tcp_socket_example'
 PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'$(GCC6_FLAG)'
