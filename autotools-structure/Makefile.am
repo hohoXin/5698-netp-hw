@@ -10,6 +10,7 @@ AUTOMAKE_OPTIONS = foreign
 SUBDIRS = m4 \
     examples/homework_1 \
     examples/socket_example \
+    examples/lab_3_example \
     examples/tcp_socket_example
 
 ACLOCAL_AMFLAGS = -I m4

@@ -35,6 +35,7 @@ AC_ARG_WITH([test],
 
 PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'-I$(top_srcdir)/examples/homework_1'
 PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'-I$(top_srcdir)/examples/socket_example'
+PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'-I$(top_srcdir)/examples/lab_3_example'
 PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'-I$(top_srcdir)/examples/tcp_socket_example'
 PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'$(GCC6_FLAG)'
 
@@ -66,6 +67,7 @@ AC_CONFIG_FILES([
   m4/Makefile
   examples/homework_1/Makefile
   examples/socket_example/Makefile
+  examples/lab_3_example/Makefile
   examples/tcp_socket_example/Makefile
   ])
 
