@@ -35,6 +35,7 @@ AC_ARG_WITH([test],
 
 PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'-I$(top_srcdir)/examples/homework_1'
 PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'-I$(top_srcdir)/examples/homework_2'
+PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'-I$(top_srcdir)/examples/homework_3'
 PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'$(GCC6_FLAG)'
 
 PFICT_CXXFLAGS="$PFICT_CXXFLAGS "'-Wall'
@@ -65,6 +66,7 @@ AC_CONFIG_FILES([
   m4/Makefile
   examples/homework_1/Makefile
   examples/homework_2/Makefile
+  examples/homework_3/Makefile
   ])
 
 AC_OUTPUT
