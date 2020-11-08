@@ -15,28 +15,55 @@
 #include <iostream>
 
 TcpWrapper::TcpWrapper(int port_num)
-// Exercise 1: implement the constructor of TcpWrapper, which
-// does the following:
-// - uses a member initialization list to initialize the member variables,
-//   with m_port initialized to port_num, and the other member variables
-//   to appropriate default values
-// - in the body of the constructor, open a TCP socket and assign its file
-//   descriptor to m_l_sock_fd
-// - check if the socket was opened successfully, if not, close and return
-// - call the function optionsAndBind, check if successful, if not, close and return
-// - call the function run()
+:
+m_port{port_num},
+m_ip{},
+m_exit{false},
+m_l_sock_fd{-1},
+m_sock_fd{-1}
 {
-
+  // open the m_l_sock_fd socket of type SOCK_STREAM
+  m_l_sock_fd = socket(AF_INET, SOCK_STREAM, 0);
+  // check if the socket creation was successful
+  if (m_l_sock_fd < 0){ 
+    std::cout << "ERROR: OPEN SOCKET" << std::endl;
+    return;
+  }
+  // call the function to set the options and bind,
+  // and close the socket and return if not successful
+  if(!optionsAndBind()) {
+    std::cout << "ERROR: BIND" << std::endl;
+    close(m_l_sock_fd);
+    return;
+  }
+  // call run()
+  TcpWrapper::run();
 }
 
 TcpWrapper::~TcpWrapper() {
-// Exercise 2: implement the destructor of TcpWrapper, which
-// does the following:
-// - sets m_exit to true
-// - closes the m_l_sock_fd socket, and assigns it the value -1. This has
-//   to happen only if the socket is still open (i.e., the file descriptor
-//   is larger than or equal to 0), otherwise you will get an error
-// - closes the m_sock_fd socket, if open, and assigns it the value -1.
+  // call the function quit
+  quit();
+}
+
+
+void 
+TcpWrapper::quit() {
+  // set m_exit to be true
+  m_exit = true;
+
+  // if m_l_sock_fd is open, close it and set the 
+  // file descriptor to -1
+  if(m_l_sock_fd >= 0) {
+    close(m_l_sock_fd);
+    m_l_sock_fd = -1;
+  }
+
+  // if m_sock_fd is open, close it and set the 
+  // file descriptor to -1
+  if(m_sock_fd >= 0){
+    close(m_sock_fd);
+    m_sock_fd = -1;
+  }
 }
 
 
@@ -48,16 +75,45 @@ TcpWrapper::run() {
   // wait for a client to connect
   if(acceptClient()) {
 
-    // Exercise 4: implement the following, inside a while loop that stops if m_exit is true:
-    // - call recvData, passing buf, to receive data, and save the
-    //   return value of recvData in a data_size variable
-    // - check if the data_size is smaller than 0, if yes, set m_exit to true and break the loop
-    // - check if the data_size is equal to 0, if yes, set m_exit to true and break the loop
-    // - print the proper message in each of the cases above
-    // - print the buf to the terminal
-    // - reset the buffer for a new read using memset
-    // - send a packet back which contains the string "Packet ACK\n". Check if the transmission
-    //   is successful, if not, set m_exit to true and break the loop. Use the method sendData
+    // start a while loop to receive data and send application ACKs to this client
+    // the loop ends when m_exit is true
+    while(!m_exit) {
+
+      // call recvData, passing buf, to receive data
+      // save the return value of recvData in a data_size variable
+      int data_size = recvData(buf);
+
+      // check if the data_size is smaller than 0
+      // if yes, set m_exit to true and break the loop
+      if (data_size < 0) {
+        std::cout << "Terminate - socket recv error" << std::endl;
+        m_exit = true;
+        break;
+      } 
+      // check if the data_size is equal to 0
+      // if yes, set m_exit to true and break the loop
+      else if (data_size == 0) {
+        std::cout << "Terminate - the other endpoint has closed the socket" << std::endl;
+        m_exit = true;
+        break;
+      } 
+
+      // print the buf to the terminal
+      std::cout << buf;
+
+      // reset the buffer for a new read using memset
+      memset(buf, 0, C_MTU); // this cleans the buffer for a new read
+
+      // send an application ACK to the other endpoint
+      std::string to_tx = "Packet ACK\n";
+      if(sendData(to_tx.c_str(), to_tx.length()) >= 0) {
+        std::cout << "TX successful" << std::endl;
+      } else {
+        // if the transmission was not successful, set m_exit to true and break the loop
+        m_exit = true;
+        break;
+      }
+    }
   }
 }
 
@@ -96,20 +152,38 @@ TcpWrapper::optionsAndBind() {
 
 bool 
 TcpWrapper::acceptClient() {
-  // Exercise 3: implement the acceptClient() method, which does the following:
-  // - prepares the struct client_addr to store the client address
-  // - calls the accept API on the socket m_l_sock_fd, and saves the file descriptor
-  //   of the new socket in m_sock_fd
-  // - if the accept was not successful, close the sockets (if they are open!) and return false
-  // - otherwise, print the client ip, and save it in m_ip as a string (you can use inet_ntoa or
-  //   inet_pton), and return true
+  // prepare the struct to store the client address
+  struct sockaddr_in client_addr;
+  socklen_t addr_l = sizeof(client_addr);
+
+  // call the accept API on the socket
+  m_sock_fd = ::accept(m_l_sock_fd, (struct sockaddr*) &client_addr, &addr_l);
+
+  // if the m_sock_fd does not open successfully, close the listening socket, and return false
+  if(m_sock_fd < 0) {
+    std::cout << "ERROR: ACCEPT CONNECTION" << std::endl;
+    if(m_l_sock_fd>=0) {
+      close(m_l_sock_fd);
+      m_l_sock_fd = - 1;
+    }
+    return false;
+  }
+
+  // The next line prints the client address, converting to char* 
+  // the network address (inet_ntoa)
+  std::cout << "New connection from " 
+            << inet_ntoa(client_addr.sin_addr) << std::endl; 
+
+  // save the client IP in the m_ip string
+  m_ip = inet_ntoa(client_addr.sin_addr);
+  return true;
 }
 
 
 int 
 TcpWrapper::recvData(char* buf)  
 {
-  if(m_sock_fd < 0) {
+  if(m_sock_fd<0) {
     return -1;
   }
   // call the recv API
@@ -120,8 +194,7 @@ TcpWrapper::recvData(char* buf)
 
     // here we close just m_sock_fd because, in principle,
     // the m_l_sock_fd can be used for other clients (not in this case, though)
-    // first, check if the socket is open
-    if(m_sock_fd >= 0) { // then close it
+    if(m_sock_fd >= 0) {
       close(m_sock_fd);
       m_sock_fd = -1;
     }

@@ -6,8 +6,8 @@
 */
 
 
-#ifndef H_TCP_WRAPPER
-#define H_TCP_WRAPPER
+#ifndef H_CHAT_SERVER
+#define H_CHAT_SERVER
 
 #include <string>
 
@@ -51,9 +51,6 @@ public:
    */
   int sendData(const char* buf, size_t size_to_tx);
 
-  // Exercise 5: declare and implement get methods for the 5 variables
-  // Remember to enforce const correctness
-
 private:
   int m_port; /**< listen socket port number */
   std::string m_ip; /**< address of who is connected */
@@ -68,6 +65,11 @@ private:
   bool optionsAndBind();
 
   /**
+   * Function called by the destructor to close the sockets
+   */
+  void quit();
+
+  /**
    * Function executed in a thread dispatched by the constructor 
    * to start the server listener
    */
@@ -75,4 +77,4 @@ private:
 
 };
 
-#endif /* H_TCP_WRAPPER */
+#endif /* CHAT_SERVER */
