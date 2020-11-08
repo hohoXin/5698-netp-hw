@@ -37,7 +37,8 @@ public: // public interface
 	/**
 	 * Constructor for a Truck object
 	 * It is explicit to avoid unwanted implicit conversions
-	 * @param plates string to represent the plates for the class, with default empty string
+	 * @param max number of pass
+	 * @param max load
 	 */
 	explicit Truck(int maximum_number_passengers, double load);
 
