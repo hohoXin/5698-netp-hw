@@ -15,6 +15,6 @@
 
 // Exercise 5: override the operator << for VehicleInterface, so that it calls the void print(std::ostream& out) const method
 
-// Exercise 6: test that everything is working properly by declaring a VehicleInterface ptr_to_car {&car_1} in lab_4_example.cpp, and then by printing it to the terminal using <<.
+// Exercise 6: test that everything is working properly by declaring a VehicleInterface* ptr_to_car {&car_1} in lab_4_example.cpp, and then by printing it to the terminal using <<.
 
 // Exercise 7: if you have time, implement a Truck class that inherits from VehicleInterface. You can do that in car.h and car.cpp, or add a new source and header (in this case, they should be added to the Makefile.am). Then declare a construct a Truck truck_1 in lab_4_example.cpp, declare a VehicleInterface ptr_to_truck {&truck_1} and compare the result of calling << on ptr_to_truck and ptr_to_car

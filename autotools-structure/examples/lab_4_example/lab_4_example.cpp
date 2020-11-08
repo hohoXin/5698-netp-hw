@@ -7,11 +7,13 @@
 
 #include <iostream>
 #include "car.h"
+#include "truck.h"
 
 int
 main(int argc, char const *argv[])
 {
   Vehicle::Car car_1{5, "AABB33C"};
+  Vehicle::Truck truck_1{5, 0.5};
 
   // let's check that there are no Passengers
   std::cout << "Number of Passengers = " 
@@ -37,6 +39,16 @@ main(int argc, char const *argv[])
   for (auto pass : list)
   {
     std::cout << pass->getName() << ", " << pass->getSurname() << std::endl;
+  }
+
+  Vehicle::VehicleInterface* ptr_to_car {&car_1};
+  Vehicle::VehicleInterface* ptr_to_truck {&truck_1};
+
+  std::vector<Vehicle::VehicleInterface*> vec {ptr_to_car, ptr_to_truck};
+
+  for (auto elem : vec)
+  {
+    std::cout << *elem << std::endl;
   }
 
   return 0;

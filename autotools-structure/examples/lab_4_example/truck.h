@@ -5,8 +5,8 @@
  * Authors Michele Polese and Pragadeesh Kumar Nithyakumar 
 */
 
-#ifndef CAR_H
-#define CAR_H
+#ifndef TRUCK_H
+#define TRUCK_H
 
 #include <vector>
 #include <string>
@@ -21,39 +21,43 @@ namespace Vehicle
 {
 
 
+// NOTE: this is probably not the best design for these two classes and interface
+// but it is useful to provide you with an additional example
+
+
 /**
- * The C++ class Car is a user-defined type to represent 
- * a Car. This class owns resources, i.e., the passengers 
+ * The C++ class Truck is a user-defined type to represent 
+ * a Truck. This class owns resources, i.e., the passengers 
  * are created in this class as pointers, and need to be handled
- * correctly when copying or destroying a Car object
+ * correctly when copying or destroying a Truck object
  */
-class Car : public VehicleInterface {
+class Truck : public VehicleInterface {
 
 public: // public interface
 	/**
-	 * Constructor for a Car object
+	 * Constructor for a Truck object
 	 * It is explicit to avoid unwanted implicit conversions
 	 * @param plates string to represent the plates for the class, with default empty string
 	 */
-	explicit Car(const int maximum_number_passengers, const std::string& plate = "");
+	explicit Truck(int maximum_number_passengers, double load);
 
 	/**
 	 * Copy constructor: needs to cope with pointers
- 	 * @param car_to_copy a const lvalue ref to a Car object
+ 	 * @param truck_to_copy a const lvalue ref to a Truck object
 	 */
-	Car(const Car& car_to_copy);
+	Truck(const Truck& truck_to_copy);
 
 	/**
 	 * Copy assignment: needs to cope with pointers
-	 * @param car_to_copy a const lvalue ref to a Car object
+	 * @param truck_to_copy a const lvalue ref to a Truck object
      * @return an lvalue ref to the copied object
 	 */
-  	Car& operator=(const Car& car_to_copy);
+  	Truck& operator=(const Truck& truck_to_copy);
 
   	/**
   	 * Destructor - needs to cope with memory resources
   	 */
-  	~Car();
+  	~Truck();
 
 	// non-modifying members to inspect a class
 	/**
@@ -75,16 +79,16 @@ public: // public interface
 	PassengerList getPassengerNames() const override;
 
 	/**
-	 * Get the plate
-	 * @return a string with the plate
+	 * Get the maximum load
+	 * @return a double with the maximum load
 	 */
-	std::string getPlates() const;
+	double getMaxLoad() const;
 
 	/**
-	 * Set the plate name
-	 * @param a string with the plate
+	 * Set the maximum load
+	 * @param load a double with the maximum load
 	 */
-	void setPlates(const std::string& plates);
+	void setMaxLoad(double load);
 
     /**
 	 * Set the max_passengers limit 
@@ -92,7 +96,7 @@ public: // public interface
 	 */
 	void setMaxPass(int maximum_number_passengers);
 
-	// modifying functions to change the Car
+	// modifying functions to change the Truck
 	/**
 	 * Add a Passenger
 	 * @param pass_name the passenger name
@@ -105,12 +109,12 @@ public: // public interface
 
 private:
 	PassengerList m_passengers; /**<list of pointers to Passenger objects */
-	std::string m_plates; /**<plates of the Car */
+    double m_max_load;
     int m_max_passengers;
 };
 
 
 }; // end of namespace Vehicle
 
-#endif // CAR_H
+#endif // TRUCK_H
 

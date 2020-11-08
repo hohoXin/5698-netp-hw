@@ -6,41 +6,41 @@
 */
 
 #include <iostream>
-#include "car.h"
+#include "truck.h"
 
 namespace Vehicle {
 
-Car::Car(const int mx_pass, const std::string& plates) : 
+Truck::Truck(int mx_pass, double load) : 
     m_passengers{}, 
-	m_plates{plates},
+	m_max_load{load},
 	m_max_passengers{mx_pass}
 {
 
 }
 
-Car::Car(const Car& car_to_copy) :
+Truck::Truck(const Truck& truck_to_copy) :
     m_passengers{}, // we do not want to copy the pointers, but the content of the pointers
-    m_plates{car_to_copy.getPlates()}, // use get methods whenever you can, instead of plain access to variables
-    m_max_passengers{car_to_copy.getMaxNumberOfPassengers()}
+    m_max_load{truck_to_copy.getMaxLoad()}, // use get methods whenever you can, instead of plain access to variables
+    m_max_passengers{truck_to_copy.getMaxNumberOfPassengers()}
 {
     // this is the piece of code that guarantees no shallow copy
-    for (auto pass : car_to_copy.getPassengerNames())
+    for (auto pass : truck_to_copy.getPassengerNames())
     {
         // here, you can re-use a function rather than copying the same code twice!
         createPassenger(pass->getName(), pass->getSurname(), pass->getCanDrive());
     }
 }
 
-Car& 
-Car::operator=(const Car& car_to_copy) 
+Truck& 
+Truck::operator=(const Truck& truck_to_copy) 
 {
     // clear the passengers list
     m_passengers.clear();
-    setPlates(car_to_copy.getPlates());
-    setMaxPass(car_to_copy.getMaxNumberOfPassengers());
+    setMaxLoad(truck_to_copy.getMaxLoad());
+    setMaxPass(truck_to_copy.getMaxNumberOfPassengers());
 
     // this is the piece of code that guarantees no shallow copy
-    for (auto pass : car_to_copy.getPassengerNames())
+    for (auto pass : truck_to_copy.getPassengerNames())
     {
         // here, you can re-use a function rather than copying the same code twice!
         createPassenger(pass->getName(), pass->getSurname(), pass->getCanDrive());
@@ -49,7 +49,7 @@ Car::operator=(const Car& car_to_copy)
     return *this;
 }
 
-Car::~Car()
+Truck::~Truck()
 {
     // we need to delete the memory that was created in this class
     for (auto pass : m_passengers) 
@@ -60,43 +60,43 @@ Car::~Car()
 
 
 int
-Car::getNumberOfPassengers() const
+Truck::getNumberOfPassengers() const
 {
 	return m_passengers.size();
 }
 
 int
-Car::getMaxNumberOfPassengers() const
+Truck::getMaxNumberOfPassengers() const
 {
     return m_max_passengers;
 }
 
 PassengerList
-Car::getPassengerNames() const
+Truck::getPassengerNames() const
 {
 	return m_passengers;
 }
 
-std::string 
-Car::getPlates() const
+double
+Truck::getMaxLoad() const
 {
-	return m_plates;
+	return m_max_load;
 }
 
 void
-Car::setPlates(const std::string& Plates)
+Truck::setMaxLoad(double load)
 {
-	m_plates = Plates;
+	m_max_load = load;
 }
 
 void
-Car::setMaxPass(int mx_pass)
+Truck::setMaxPass(int mx_pass)
 {
 	m_max_passengers = mx_pass;
 }
 
 void
-Car::createPassenger(const std::string& pass_name, const std::string& pass_surname, bool drive_flag)
+Truck::createPassenger(const std::string& pass_name, const std::string& pass_surname, bool drive_flag)
 {
     if(m_passengers.size() < m_max_passengers) {
 	    Passenger* pass = new Passenger{pass_name, pass_surname, drive_flag};
@@ -112,9 +112,9 @@ Car::createPassenger(const std::string& pass_name, const std::string& pass_surna
 }
 
 void
-Car::print(std::ostream& out) const
+Truck::print(std::ostream& out) const
 {
-    out << "Car plates " << getPlates();
+    out << "Truck has max load " << getMaxLoad();
 }
 
 }
