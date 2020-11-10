@@ -36,8 +36,6 @@ m_sock_fd{-1}
     close(m_l_sock_fd);
     return;
   }
-  // call run()
-  TcpWrapper::run();
 }
 
 TcpWrapper::~TcpWrapper() {
@@ -68,7 +66,7 @@ TcpWrapper::quit() {
 
 
 void 
-TcpWrapper::run() {
+TcpWrapper::runServer() {
   // create a char buffer called buf, of size C_MTU
   char buf[C_MTU];
 
@@ -203,7 +201,8 @@ TcpWrapper::recvData(char* buf)
 }
 
 
-int TcpWrapper::sendData(const char* buf, size_t size_to_tx) 
+int
+TcpWrapper::sendData(const char* buf, size_t size_to_tx) 
 {
   if(m_sock_fd<0) {
     return -1;
@@ -218,4 +217,10 @@ int TcpWrapper::sendData(const char* buf, size_t size_to_tx)
     return -4;
   }
   return sent_size;
+}
+
+void 
+TcpWrapper::print(std::ostream& out) const
+{
+  out << "TCP socket on port " << m_port;
 }

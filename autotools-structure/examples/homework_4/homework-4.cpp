@@ -23,7 +23,13 @@ main(int argc, char const *argv[])
     std::cerr << "SIGPIPE" << std::endl; //
   }
 
-  TcpWrapper server(55555);
+  TcpWrapper tcp_server {55555};
+
+  SocketWrapper* ptr_tcp {&tcp_server};
+
+  std::cout << *ptr_tcp << std::endl;
+
+  ptr_tcp->runServer();
 
   return 0;
 }

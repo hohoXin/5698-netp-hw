@@ -10,6 +10,7 @@
 #define H_SOCKET_SERVER
 
 #include <string>
+#include <iostream>
 
 constexpr size_t C_MTU = 512; /** <Chat MTU */
 
@@ -38,6 +39,23 @@ public:
    * @return number of bytes sent (-1 if error occurred)
    */
   virtual int sendData(const char* buf, size_t size_to_tx) = 0;
+
+  /**
+   * Run the server
+   */
+  virtual void runServer() = 0;
+
+protected:
+  /**
+   * Print something about the socket
+   * @param out an ostream to print to
+   * @return an ostream
+   */
+  virtual void print(std::ostream& out) const = 0;
+
+  friend std::ostream& operator<<(std::ostream& out, const SocketWrapper& wrapper);
 };
+
+std::ostream& operator<<(const std::ostream& out, const SocketWrapper& wrapper);
 
 #endif /* H_SOCKET_SERVER */

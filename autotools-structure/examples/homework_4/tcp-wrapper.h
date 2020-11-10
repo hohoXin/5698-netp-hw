@@ -50,6 +50,20 @@ public:
    */
   int sendData(const char* buf, size_t size_to_tx) override;
 
+  /**
+   * Function executed in a thread dispatched by the constructor 
+   * to start the server listener
+   */
+  void runServer() override;
+
+protected:
+  /**
+   * Print something about the socket
+   * @param out an ostream to print to
+   * @return an ostream
+   */
+  void print(std::ostream& out) const override;
+
 private:
   int m_port; /**< listen socket port number */
   std::string m_ip; /**< address of who is connected */
@@ -67,12 +81,6 @@ private:
    * Function called by the destructor to close the sockets
    */
   void quit();
-
-  /**
-   * Function executed in a thread dispatched by the constructor 
-   * to start the server listener
-   */
-  void run();
 
 };
 

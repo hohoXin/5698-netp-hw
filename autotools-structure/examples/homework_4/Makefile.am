@@ -7,11 +7,11 @@
 
 AM_CXXFLAGS = @PFICT_CXXFLAGS@
 
-bin_PROGRAMS = homework_3_exec
+bin_PROGRAMS = homework_4_exec
 
 
-homework_3_exec_SOURCES = homework-3.cpp tcp-wrapper.cpp
+homework_4_exec_SOURCES = homework-4.cpp tcp-wrapper.cpp socket-wrapper.cpp
 
-homework_3_exec_CPPFLAGS = @PFICT_CPPFLAGS@ 
-homework_3_exec_LDFLAGS = @PFICT_LDFLAGS@
-homework_3_exec_LDADD = @PFICT_LDADD@ 
+homework_4_exec_CPPFLAGS = @PFICT_CPPFLAGS@ 
+homework_4_exec_LDFLAGS = @PFICT_LDFLAGS@
+homework_4_exec_LDADD = @PFICT_LDADD@ 
