@@ -46,16 +46,13 @@ public:
    * get the status report back to the connected client
    * @return a string describing the status of the reception
    */
-  // Exercise 1 declare and implement (in the .cpp file) the method getReport(), 
-  // which returns a string as follows:
-  // "Number of bytes received = " + the number of bytes successfully received + ", over a total of " + the FILE_SIZE variable + " bytes \n";
+  std::string getReport() const;
 
   /**
    * get the socket file descriptor
    * @return the socket file descriptor
    */
-  // Exercise 1 declare and implement (in the .cpp) file the method getSockFd(),
-  // which returns the socket file descriptor
+  int getSockFd() const;
 
 private:
 

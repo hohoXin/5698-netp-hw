@@ -23,11 +23,12 @@
  */
 bool acceptTcpConn(std::shared_ptr<EthConn> server) 
 {
-  // Exercise 2: call the acceptConn() method on the server (casting, if necessary)
-  // If the call to acceptConn() returns true, print "server accepted client " and the IP
-  // of the connected client using the getIp method, and return true
-  // If the call to acceptConn() returns false, or if the cast does not go as expected, 
-  // return false
+  auto casted_server = std::dynamic_pointer_cast<TcpServerConnection>(server); // use auto only if you are sure of the return type :) 
+  if (casted_server != nullptr and casted_server->acceptConn()) {
+  	std::cout << "Server accepted client " << server->getIp() << "\n";
+  	return true;
+  }
+  return false;
 }
 
 int main(int argc, char** argv) 
@@ -48,8 +49,7 @@ int main(int argc, char** argv)
     }
   }  
 
-  // Exercise 9
-  // block the execution of the current thread for 5 seconds
+  std::this_thread::sleep_for(std::chrono::seconds(5));
 
   std::cout << "Terminate the execution" << std::endl;
   return 0;

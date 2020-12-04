@@ -16,7 +16,7 @@
 #include <iostream>
 #include <algorithm>
 
-const unsigned int Service::FILE_SIZE = 100;
+const unsigned int Service::FILE_SIZE = 4;
 
 Service::Service(int sk_fd)
 :
@@ -24,14 +24,18 @@ sock_fd(sk_fd),
 total_received_size(0)
 {
   std::cout << "constructor, sock_fd = " << sock_fd << std::endl;
-  // Exercise 5: launch a thread to execute run(), and save it 
-  // in servent_daemon
+  servent_daemon = std::thread(&Service::run, this);
 }
 
 Service::~Service()
 {
-  // Exercise 6: implement this method, which should close the socket,
-  // if open, and correctly handle the thread, if possible
+  if (sock_fd > -1) {
+  	close(sock_fd);
+  }
+
+  if(servent_daemon.joinable()) {
+  	servent_daemon.join();
+  }
 }
 
 
@@ -43,19 +47,30 @@ void Service::run()
 
   std::cout << "Service::run" << std::endl;
   while(sock_fd > -1 && total_received_size < Service::FILE_SIZE) {
+    size_t to_read {std::min(MAX_BUF_SIZE, (size_t)Service::FILE_SIZE - total_received_size)};
+    std::cout << "to_read " << to_read << "\n"; 
+    ssize_t recv_data {::recv(sock_fd, buffer, to_read, 0)};
+
+    if (recv_data < 0) {
+    	std::cout << "Error in read " << recv_data << "\n";
+    	close(sock_fd);
+    	return;
+    } else if (recv_data == 0) {
+    	std::cout << "The other endpoint has closed the socket\n";
+    	close(sock_fd);
+    	return;
+    }
     
-    // Exercise 7
-    // Implement the code to read data from the socket sock_fd in the buffer buffer.
-    // The number of bytes to read is the minimum between the MAX_BUF_SIZE and the
-    // remaining read size (i.e., Service::FILE_SIZE - total_received_size)
-    // Check if the read was correct
-    // Update the total received size
+    total_received_size += recv_data;
 
     std::string message = getReport();
 
-    // Exercise 8
-    // Implement the code to send the message string through sock_fd
-    // Check if the send was correct
+    ssize_t sent_data {::send(sock_fd, message.c_str(), message.size(), 0)};
+	if (sent_data < 0) {
+    	std::cout << "Error in send " << sent_data << "\n";
+    	close(sock_fd);
+    	return;
+    }
 
     memset(buffer,0,MAX_BUF_SIZE);
   }
@@ -68,9 +83,15 @@ void Service::run()
   }
 }
 
-// Exercise 1: declare (in the .h file) and implement the method getReport(), 
-// which returns a string as follows:
-// "Number of bytes received = " + the number of bytes successfully received + ", over a total of " + the FILE_SIZE variable + " bytes \n";
+std::string
+Service::getReport() const
+{
+	return "Number of bytes received = " + std::to_string(total_received_size) + 
+		 ", over a total of " + std::to_string(Service::FILE_SIZE) + " bytes \n";
+}
 
-// Exercise 1: declare (in the .h file) and implement file the method getSockFd(),
-// which returns the socket file descriptor
+int
+Service::getSockFd() const
+{
+	return sock_fd;
+}

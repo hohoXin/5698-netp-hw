@@ -34,8 +34,12 @@ connections_count(0)
   }
 }
 
-// Exercise 4 implement the destructor ~TcpServerConnection
-// which closes the socket if still valid
+TcpServerConnection::~TcpServerConnection()
+{
+	if(l_sock_fd >= 0) {
+		close(l_sock_fd);
+	}
+}
 
 bool TcpServerConnection::optionsAndBind() 
 {
@@ -69,13 +73,25 @@ bool TcpServerConnection::optionsAndBind()
 
 bool TcpServerConnection::acceptConn() 
 {
-  // Exercise 3: implement the code to accept a client and print the IP of 
-  // the client to the terminal
-  // The IP address should be saved in the ip member variable (see EthConn)
-  // Use std::make_shared to create a shared_ptr to a Service object,
-  // passing the sock_fd to the constructor, and add the shared_ptr to the
-  // services vector
-  // Increase the connections_count by 1
+  struct sockaddr_in client_addr;
+  socklen_t addr_l = sizeof(client_addr);
+ 
+  int sock_fd = accept(l_sock_fd, (struct sockaddr*) &client_addr, &addr_l);
+  if(sock_fd < 0) {
+    std::cout << "ERROR: ACCEPT CONNECTION" << std::endl;
+    return false;
+  }
+ 
+  // The next line prints the client address, converting to char* 
+  // the network address (inet_ntoa)
+  std::cout << "New connection from " << inet_ntoa(client_addr.sin_addr) 
+            << ", socket fd = " << sock_fd << std::endl; 
+ 
+  ip = inet_ntoa(client_addr.sin_addr);
+ 
+  services.push_back(std::make_shared<Service>(sock_fd));
+  connections_count++;
+
   return true;
 }
 
