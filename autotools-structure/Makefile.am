@@ -14,6 +14,7 @@ SUBDIRS = m4 \
     examples/lab_4_example \
     examples/lab_6_example \
     examples/lab_7_example \
+    examples/final \
     examples/tcp_socket_example
 
 ACLOCAL_AMFLAGS = -I m4

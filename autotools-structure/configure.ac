@@ -39,6 +39,7 @@ PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'-I$(top_srcdir)/examples/lab_3_example'
 PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'-I$(top_srcdir)/examples/lab_4_example'
 PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'-I$(top_srcdir)/examples/lab_6_example'
 PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'-I$(top_srcdir)/examples/lab_7_example'
+PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'-I$(top_srcdir)/examples/final'
 PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'-I$(top_srcdir)/examples/tcp_socket_example'
 PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'$(GCC6_FLAG)'
 
@@ -74,6 +75,7 @@ AC_CONFIG_FILES([
   examples/lab_4_example/Makefile
   examples/lab_6_example/Makefile
   examples/lab_7_example/Makefile
+  examples/final/Makefile
   examples/tcp_socket_example/Makefile
   ])
 
