@@ -33,7 +33,7 @@ AC_ARG_WITH([test],
   [with_test="$withval"],
   [with_test=""])
 
-PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'-I$(top_srcdir)/examples/homework_1'
+# PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'-I$(top_srcdir)/examples/homework_1'
 PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'-I$(top_srcdir)/examples/socket_example'
 PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'$(GCC6_FLAG)'
 
@@ -63,7 +63,6 @@ AC_SUBST(with_test)
 AC_CONFIG_FILES([
   Makefile
   m4/Makefile
-  examples/homework_1/Makefile
   examples/socket_example/Makefile
   ])
 
