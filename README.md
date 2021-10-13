@@ -3,6 +3,9 @@
 NOTE: This code works ONLY with Linux an macOS. There is no support for Windows.
 
 ### HOW-TO setup your system
+
+Note: this is not needed if you are working inside the docker container. 
+
 Compiler: be sure to have at least g++ 5.4 or a newer version. 
 (You can check by typing in your shell `g++ -v`.)
 Install the following packages, by typing in your shell:
@@ -26,7 +29,7 @@ brew install libtool
 * open a shell
 * clone the Github repo (with HTTPS) by typing:
 ```
-git clone https://github.com/neu-eece-5698-network-programming/network-programming.git
+git clone https://github.com/neu-eece-5698-network-programming/homework-fall-2021.git
 ```
 * go to the installer directory, by typing:
 ```
@@ -55,29 +58,6 @@ Notes on GIT:
 
 * HOWTO clone the repo (with HTTPS):
 ```
-git clone https://github.com/neu-eece-5698-network-programming/network-programming.git
+git clone https://github.com/neu-eece-5698-network-programming/homework-fall-2021.git
 ```
-* The master branch is protected: please clone the repo and then work in your own branch.
-* In order to change your branch, type:
-```
-git checkout -b <my-username>-<branch-name>
-```
-where you substitute
-	- `<my-username>` with your user name, and 
-	- `<branch-name>` with a meaningful branch name
-* now you can commit your changes with
-```
-git add <file1> <file2> <file3> ..
-git commit -m "your message that means something"
-```
-* in the case you want to push the branch to remote (and let everyone see what you 
-did so far), just type 
-```
-git push origin <my-username>-<branch-name>
-```
-* You can now create a merge request, assigning the code review to someone.
-* To update your branch with the remote (if someone else pushed on it), type:
-```
-git pull origin <my-username>-<branch-name>
-```
-
+Please do not push on this repo.
