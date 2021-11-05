@@ -3,6 +3,8 @@
 NOTE: This code works ONLY with Linux an macOS. There is no support for Windows.
 
 ### HOW-TO setup your system
+Note: this is not needed if you are working inside the docker container. 
+
 Compiler: be sure to have at least g++ 5.4 or a newer version. 
 (You can check by typing in your shell `g++ -v`.)
 Install the following packages, by typing in your shell:
@@ -26,7 +28,7 @@ brew install libtool
 * open a shell
 * clone the Github repo (with HTTPS) by typing:
 ```
-git clone https://github.com/neu-eece-5698-network-programming/homework.git
+git clone https://github.com/neu-eece-5698-network-programming/homework-fall-2021.git
 ```
 * go to the installer directory, by typing:
 ```
@@ -55,6 +57,6 @@ Notes on GIT:
 
 * HOWTO clone the repo (with HTTPS):
 ```
-git clone https://github.com/neu-eece-5698-network-programming/homework.git
+git clone https://github.com/neu-eece-5698-network-programming/homework-fall-2021.git
 ```
 Please do not push on this repo.
