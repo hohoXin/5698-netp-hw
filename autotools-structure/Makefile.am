@@ -10,8 +10,8 @@ AUTOMAKE_OPTIONS = foreign
 
 SUBDIRS = m4 \
     basic_utilities \
-    examples/lesson_1_hello_world
-#     examples/types_declarations_example \
+    examples/lesson_1_hello_world \
+    examples/types_declarations_example
 #     examples/statements_example \
 #     examples/functions_example \
 #     examples/structs_enums_example \
