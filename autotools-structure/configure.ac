@@ -41,7 +41,7 @@ PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'-I$(top_srcdir)/examples/types_declarations_ex
 PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'-I$(top_srcdir)/examples/pointers_arrays_references_example'
 PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'-I$(top_srcdir)/examples/structs_enums_examples'
 PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'-I$(top_srcdir)/examples/statements_example'
-# PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'-I$(top_srcdir)/examples/functions_examples'
+PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'-I$(top_srcdir)/examples/functions_examples'
 # PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'-I$(top_srcdir)/examples/argc_argv_example'
 # PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'-I$(top_srcdir)/examples/socket_example'
 # PFICT_CPPFLAGS="$PFICT_CPPFLAGS "'-I$(top_srcdir)/examples/tcp_socket_example'
@@ -107,11 +107,11 @@ AC_CONFIG_FILES([
   examples/pointers_arrays_references_example/Makefile
   examples/structs_enums_example/Makefile
   examples/statements_example/Makefile
+  examples/functions_example/Makefile
   test/basic_utilities_test/Makefile
   ])
 
 
-# examples/functions_example/Makefile
 # examples/argc_argv_example/Makefile
 # examples/socket_example/Makefile
 # examples/tcp_socket_example/Makefile

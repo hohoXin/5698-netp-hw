@@ -40,6 +40,13 @@ int main(int argc, char* argv[])
     std::cout << "x_pointer != nullptr" << std::endl;
   }
 
+  if (x_pointer != nullptr && *x_pointer != 0)
+  { // the second condition is evaluated only
+  	// if x_pointer is not a nullptr, this avoids 
+  	// accessing the value of a pointer which is not valid
+  	std::cout << "Pointer value " << *x_pointer << std::endl;
+  }
+
   x_pointer = nullptr;
   if (x_pointer || x) { // the second condition is evaluated only
     // if x_pointer is a nullptr (thus the first is false)

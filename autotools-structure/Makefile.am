@@ -14,9 +14,9 @@ SUBDIRS = m4 \
     examples/types_declarations_example \
     examples/pointers_arrays_references_example \
     examples/statements_example \
-    examples/structs_enums_example
-#     examples/functions_example \
-#     examples/argc_argv_example \
+    examples/structs_enums_example \
+    examples/functions_example \
+#     examples/argc_argv_example
 #     examples/socket_example \
 #     examples/tcp_socket_example \
 #     examples/namespaces_example \
