@@ -1,6 +1,6 @@
 ## "Network Programming" repo.
 
-NOTE: This code works ONLY with Linux an macOS. There is no support for Windows.
+NOTE: Please clone this repository in the container. All the prerequisites in the HOW-TO are satisfied by the container.
 
 ### HOW-TO setup your system
 Compiler: be sure to have at least g++ 5.4 or a newer version. 
@@ -26,7 +26,7 @@ brew install libtool
 * open a shell
 * clone the Github repo (with HTTPS) by typing:
 ```
-git clone https://github.com/neu-eece-5698-network-programming/network-programming.git
+git clone https://github.com/neu-eece-5698-network-programming/homework-fall-2022.git
 ```
 * go to the installer directory, by typing:
 ```

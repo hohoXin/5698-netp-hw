@@ -28,6 +28,10 @@ int main(int argc, char** argv) {
   // the port should be saved in a variable called recv_port and of type const int
   // if the command line does not specify a port, use 55555
 
+  // note: if you are not sure of how to do exercise 1 and want to start with sockets,
+  // you can start by declaring const int recv_port {55555}; and continue with exercise 2-9
+  // and 11-12 then you can come back and solve 1 and 10
+
   // exercise 2
   // open a SOCK_DGRAM (UDP) socket using the socket API
   // the socket file descriptor should be called sckfd, and of course of type int
