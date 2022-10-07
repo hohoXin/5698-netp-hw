@@ -15,12 +15,13 @@ SUBDIRS = m4 \
     examples/pointers_arrays_references_example \
     examples/statements_example \
     examples/structs_enums_example \
-    examples/functions_example
-#     examples/argc_argv_example
+    examples/functions_example \
+    examples/argc_argv_example \
+    examples/socket_example \
+    examples/namespaces_example \
+    examples/classes_example
 #     examples/socket_example \
 #     examples/tcp_socket_example \
-#     examples/namespaces_example \
-#     examples/classes_example \
 #     examples/lab_3_example \
 #     examples/lab_4_example \
 #     examples/lab_5_example \

@@ -93,6 +93,14 @@ void print(double a)
 {
   std::cout << "print(double) " << a << std::endl;
 }
+
+/**
+ * Here I put the documentation for the function
+ * The function does XYZ
+ *
+ * @param a char that will be printed
+ * @return nothing
+ */
 void print(char a)
 {
   std::cout << "print(char) " << a << std::endl;
