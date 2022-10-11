@@ -42,13 +42,14 @@ int main(int argc, char** argv) {
 
   // exercise 1: declare a variable listen_port of type const int, which is
   // 55555 if no argument is provided, or the argument otherwise
+  // as for the UDP lab, skip this and declare const int listen_port {55555}; if you are not sure of how to do it
   
   // exercise 2: open a SOCK_STREAM (TCP) socket and save the file descriptor
   // in an int variable scklist
   // check if the operation is successful, if not, print an error, close the socket and return
 
   // exercise 3: set socket options to release the socket address immediately after 
-  // the socket is closed, so that it can be immediately reused (see SO_REUSEADDR and setsockopt)
+  // the socket is closed, so that it can be immediately reused (see SO_REUSEADDR and setsockopt from Friday's class)
   
   // exercise 4
   // declare and set to 0 a struct called my_addr and of type struct sockaddr_in 
