@@ -12,11 +12,11 @@ int main(int argc, char** argv) {
   // READ from argv, the command line argument vector, by checking the arguments
   // counter (argc), i.e.,
   //   ./proxy has argc = 1 and no command line arguments
-  //   ./proxy 55555 has argc = 2 and the tcp_server port as argument
-  //   ./proxy 55555 55556 has argc = 3 and the tcp_server port and udp_client port as argument
+  //   ./proxy 55557 has argc = 2 and the tcp_server port as argument
+  //   ./proxy 55557 55556 has argc = 3 and the tcp_server port and udp_client port as argument
   
   // Exercise 1a: declare a variable listen_port of type const int, which is
-  // 55555 if no argument is provided, or the argument otherwise
+  // 55557 if no argument is provided, or the argument otherwise
   // Exercise 1b: declare a variable udp_port of type const int, which is
   // 55556 if no argument is provided, or the argument otherwise
 
