@@ -32,7 +32,9 @@ main(int argc, char const *argv[])
   std::cout << "The plates in car_2 are " << car_2.getPlates() 
     << std::endl;
 
+  // Exercise 9
   // what do you think auto will translate to?
+  // change auto to that.
   auto list = car_2.getPassengerNames();
   // print them
   for (auto pass : list)
