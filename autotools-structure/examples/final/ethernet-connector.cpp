@@ -32,10 +32,14 @@ void EthConn::print(std::ostream& out) const
   // Exercise 1: implement this method, which will print
   // relevant information on this class (e.g., that
   // it is an EthConn running on a certain IP and port).
+  out << "EthConn port = " << std::to_string(port) 
+      << " ip = " << ip;
 }
 
 std::ostream& operator<<(std::ostream& out, const EthConn& conn) 
 {
   // Exercise 1: implement this method so that is works correctly 
   // when EthConn is overloaded
+  conn.print(out);
+	return out;
 }

@@ -11,6 +11,11 @@
 #include <iostream>
 
 NetworkAdder::NetworkAdder(int port_num)
+:
+m_sum{0},
+m_port_num{port_num},
+m_server{std::make_shared<UdpServer>(port_num)}
+// m_server{}
 {
   // Exercise 3: implement the constructor, which initializes
   // the member variables appropriately
@@ -23,6 +28,13 @@ void NetworkAdder::sum(std::shared_ptr<std::array<char,MTU>> buf)
   // 1- convert the char buffer to an integer, using std::strtol (preferrable) or std::atoi
   // 2- sums the number to m_sum
   // 3- prints to the terminal the received number and the sum so far
+  long int number;
+  char *str;
+
+  number = std::strtol(buf->data(), nullptr, 10);
+  m_sum = m_sum + number;
+
+  std::cout << "Recieved number is: " << number << ", the sum so far: " << m_sum << std::endl;
 }
 
 int NetworkAdder::prepareTxBuffer(std::shared_ptr<std::array<char,MTU>> buf) const
@@ -98,4 +110,14 @@ int NetworkAdder::run(int max_num_to_add)
       m_sum = 0;
     }
   }
+}
+
+long int NetworkAdder::getSum()
+{
+  return m_sum;
+}
+
+int NetworkAdder::getPort()
+{
+  return m_port_num;
 }

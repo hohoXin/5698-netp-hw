@@ -40,12 +40,14 @@ public:
    * @return the current sum
    */
   // Exercise 2: declare and implement the getSum method
+  long int getSum();
 
   /**
    * Get the port number
    * @return the port of the server
    */
   // Exercise 2: declare and implement the getPort method
+  int getPort();
 
 private:
   /**

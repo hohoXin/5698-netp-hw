@@ -26,6 +26,17 @@ sock_fd(-1)
   // 3- binds the socket to the port specified as input and any interface,
   // and sets the SO_REUSEADDR option
   // 4- checks if this operation was successful, if not, prints an error and returns
+  sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
+  if (sock_fd < 0){ 
+    std::cout << "ERROR: OPEN SOCKET" << std::endl;
+    close(sock_fd);
+    return;
+  }
+  if(!optionsAndBind()) {
+    std::cout << "ERROR: BIND" << std::endl;
+    close(sock_fd);
+    return;
+  }
 }
 
 UdpServer::~UdpServer() {
@@ -76,9 +87,20 @@ int UdpServer::transmitTo(std::shared_ptr<std::array<char,MTU>> buf,
   // Exercise 5: implement this method, which has to perform the following operations:
   // 1- send a UDP packet using sock_fd
   // 2- check if the send operation was successful, if not, closes the socket and returns a negative number
+  int send_size = sendto(sock_fd, buf->data(), buf->max_size(), 0,
+    (struct sockaddr *)&srcaddr, addrlen);
+
+  if(send_size < 0) {
+    std::cout << "ERROR: SEND" << std::endl;
+    close(sock_fd);
+    sock_fd = -1;
+  }
+  return send_size;
 }
 
 void UdpServer::print(std::ostream& out) const
 {
   // Exercise 1: implement this method to print some relevant info on a UdpServer
+  out << "UdpServerConnection(localhost:" << std::to_string(port) 
+      << "), last host connected = " << ip;
 }
