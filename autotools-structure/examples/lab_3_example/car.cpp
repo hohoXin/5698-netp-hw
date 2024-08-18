@@ -24,9 +24,9 @@ Car::Car(const int mx_pass, const std::string& plates)
 // using the member init list, except for m_passengers, for which you need
 // to copy the object pointed to by the entiers in m_passengers of the object 
 // to be copied, or create new Passengers (as in the copy assignment below)
+Car::Car(const Car& car_to_copy);
 
-Car& 
-Car::operator=(const Car& car_to_copy) 
+Car& Car::operator=(const Car& car_to_copy) 
 {
     // clear the passengers list
     m_passengers.clear();

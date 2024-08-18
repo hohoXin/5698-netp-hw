@@ -39,6 +39,7 @@ public: // public interface
  	 * @param car_to_copy a const lvalue ref to a Car object
 	 */
 	// Exercise 1: declare and implement (in the .cpp) the copy constructor
+	Car(const Car& car_to_copy);
 
 	/**
 	 * Copy assignment: needs to cope with pointers
