@@ -105,7 +105,7 @@ TcpWrapper::runServer() {
       // send an application ACK to the other endpoint
       std::string to_tx = "Packet ACK\n";
       if(sendData(to_tx.c_str(), to_tx.length()) >= 0) {
-        std::cout << "TX successful" << std::endl;
+        std::cout << "TCP TX successful" << std::endl;
       } else {
         // if the transmission was not successful, set m_exit to true and break the loop
         m_exit = true;
@@ -169,7 +169,7 @@ TcpWrapper::acceptClient() {
 
   // The next line prints the client address, converting to char* 
   // the network address (inet_ntoa)
-  std::cout << "New connection from " 
+  std::cout << "New TCP connection from " 
             << inet_ntoa(client_addr.sin_addr) << std::endl; 
 
   // save the client IP in the m_ip string

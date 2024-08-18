@@ -8,6 +8,7 @@
 #include <iostream>
 #include <chrono>
 #include <tcp-wrapper.h>
+#include <udp-wrapper.h>
 #include <signal.h>
 #include <string.h>
 #include <vector>
@@ -33,15 +34,21 @@ main(int argc, char const *argv[])
   std::shared_ptr<SocketWrapper> tcp_server = 
       std::make_shared<TcpWrapper>(55555);
 
+  std::shared_ptr<SocketWrapper> udp_server = 
+      std::make_shared<UdpWrapper>(55555);
+
   // Exercise 3: add the shared_ptr to the UdpWrapper in server_vec
-  std::vector<std::shared_ptr<SocketWrapper>> server_vec {tcp_server};
+  std::vector<std::shared_ptr<SocketWrapper>> server_vec {tcp_server, udp_server};
+  // server_vec.push_back(udp_server);
   
   // Exercise 4: create a vector of std::thread objects
+  std::vector<std::thread> thread_vec {};
   
   for (auto serv : server_vec) {
     // Exercise 5: launch a thread that calls the method runServer
     // on serv, and use the push_back function to add the std::thread
     // object to thread_vec
+    thread_vec.push_back(std::thread(&SocketWrapper::runServer, serv));
   }
 
   // pause this thread for 300 s
@@ -50,6 +57,11 @@ main(int argc, char const *argv[])
   // Exercise 6: loop over thread_vec, check if the entries are joinable, 
   // and, if so, join the thread. Feel free to change the duration of the 
   // sleep above to test if this loop executes properly.
+  for (auto &thr : thread_vec){
+    if(thr.joinable()){
+      thr.join();
+    }
+  }
 
   return 0;
 }
