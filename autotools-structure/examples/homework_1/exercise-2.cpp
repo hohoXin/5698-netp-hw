@@ -7,6 +7,7 @@
  */
 
 // remember to use the relevant #include
+#include <iostream>
 
 // the binary generated from this C++ code should be called
 // with at least one extra command line argument
@@ -21,10 +22,22 @@ int main (int argc, char* argv[])
 
 	// initialize each entry in the array with the command-line arguments
 	// (except for the name of the binary, which is the first entry in argv)
+	int word_num = argc - 1;
+	char** word_cont = argv;
+	char* world_first = *(word_cont + 1);
 
 	// print the content of the array to the terminal, one entry for each line
 	// (without using argv, use the new array!)
+	for(int i = 1; i <= word_num; i++)
+	{
+		std::cout << *(word_cont + i) << std::endl;
+	}
 
 	// print the first string literal in the array, one letter for each line
+	for(; *world_first != '\0'; ++world_first)
+    {
+    	std::cout << *world_first << std::endl;
+    }
+
 	return 0;
 }
