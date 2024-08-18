@@ -54,6 +54,36 @@ public:
   // Exercise 5: declare and implement get methods for the 5 variables
   // Remember to enforce const correctness
 
+  int
+  getListenPortNum() const
+  {
+    return m_port;
+  }
+
+  std::string
+  getConnectedIP() const
+  {
+    return m_ip;
+  }
+
+  bool
+  getExitStatus() const
+  {
+    return m_exit;
+  }
+
+  int
+  getListenerFD() const
+  {
+    return m_l_sock_fd;
+  }
+
+  int
+  getDataFD() const
+  {
+    return m_sock_fd;
+  }
+
 private:
   int m_port; /**< listen socket port number */
   std::string m_ip; /**< address of who is connected */

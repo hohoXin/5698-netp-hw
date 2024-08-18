@@ -14,7 +14,12 @@
 #include <unistd.h>
 #include <iostream>
 
-TcpWrapper::TcpWrapper(int port_num)
+TcpWrapper::TcpWrapper(int port_num) :
+  m_port{port_num},
+  m_ip{},
+  m_exit{},
+  m_l_sock_fd{},
+  m_sock_fd{}
 // Exercise 1: implement the constructor of TcpWrapper, which
 // does the following:
 // - uses a member initialization list to initialize the member variables,
@@ -26,7 +31,19 @@ TcpWrapper::TcpWrapper(int port_num)
 // - call the function optionsAndBind, check if successful, if not, close and return
 // - call the function run()
 {
+  m_l_sock_fd = socket(AF_INET, SOCK_STREAM, 0);
+  if (m_l_sock_fd < 0){ 
+    std::cout << "ERROR: OPEN SOCKET " << m_l_sock_fd << std::endl;
+    close(m_l_sock_fd);
+    return;
+  }
 
+  if(!optionsAndBind()){
+    close(m_l_sock_fd);
+    return;
+  }
+
+  run();
 }
 
 TcpWrapper::~TcpWrapper() {
@@ -37,6 +54,18 @@ TcpWrapper::~TcpWrapper() {
 //   to happen only if the socket is still open (i.e., the file descriptor
 //   is larger than or equal to 0), otherwise you will get an error
 // - closes the m_sock_fd socket, if open, and assigns it the value -1.
+
+  m_exit = true;
+  // second, check if the socket is open
+    if(m_l_sock_fd >= 0) { // then close it
+      close(m_l_sock_fd);
+      m_l_sock_fd = -1;
+    }
+  // third, check if the socket is open
+    if(m_sock_fd >= 0) { // then close it
+      close(m_sock_fd);
+      m_sock_fd = -1;
+    }
 }
 
 
@@ -44,6 +73,7 @@ void
 TcpWrapper::run() {
   // create a char buffer called buf, of size C_MTU
   char buf[C_MTU];
+  char buf_ACK[] = "Packet ACK\n";
 
   // wait for a client to connect
   if(acceptClient()) {
@@ -58,6 +88,28 @@ TcpWrapper::run() {
     // - reset the buffer for a new read using memset
     // - send a packet back which contains the string "Packet ACK\n". Check if the transmission
     //   is successful, if not, set m_exit to true and break the loop. Use the method sendData
+
+    while(!m_exit){
+      int data_size = recvData(buf);
+
+      if(data_size < 0) {
+        std::cout << "ERROR: RECV" << std::endl;
+        m_exit = true;
+        break;
+      }else if(data_size == 0){
+        std::cout << "ERROR: RECV (the remote side has closed)" << std::endl;
+        m_exit = true;
+        break;
+      }
+
+      std::cout << "Received: " << buf << std::endl;
+      memset(buf, 0, C_MTU);
+
+      if(sendData(buf_ACK, sizeof(buf_ACK))<0){
+        m_exit = true;
+        break;
+      }
+    }
   }
 }
 
@@ -103,6 +155,30 @@ TcpWrapper::acceptClient() {
   // - if the accept was not successful, close the sockets (if they are open!) and return false
   // - otherwise, print the client ip, and save it in m_ip as a string (you can use inet_ntoa or
   //   inet_pton), and return true
+
+  struct sockaddr_in client_addr;
+  socklen_t addr_l = sizeof(client_addr);
+
+  m_sock_fd = accept(m_l_sock_fd, (struct sockaddr*) &client_addr, &addr_l);
+  // check accept status
+  if(m_sock_fd < 0) {
+    std::cout << "ERROR: ACCEPT CONNECTION" << std::endl;
+    //check if the socket is open
+    if(m_l_sock_fd >= 0) { // then close it
+      close(m_l_sock_fd);
+      m_l_sock_fd = -1;
+    }
+    //check if the socket is open
+    if(m_sock_fd >= 0) { // then close it
+      close(m_sock_fd);
+      m_sock_fd = -1;
+    }
+    return false;
+  }else{
+    m_ip = inet_ntoa(client_addr.sin_addr);
+    std::cout << "New connection from " << m_ip << std::endl;
+    return true;
+  }
 }
 
 
@@ -135,7 +211,7 @@ int TcpWrapper::sendData(const char* buf, size_t size_to_tx)
   if(m_sock_fd<0) {
     return -1;
   }
-  int sent_size = ::send(m_sock_fd,buf,size_to_tx,0); // send the data through sckfd
+  int sent_size = ::send(m_sock_fd,buf,size_to_tx,0); // send the data through m_sock_fd
   if(sent_size < 0) { // the send returns a size of -1 in case of errors
     std::cout << "ERROR: SEND" << std::endl;
     if(m_sock_fd >= 0) {
