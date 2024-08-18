@@ -3,7 +3,8 @@
 // (formerly run()) is not called inside the constructor of TcpWrapper, but
 // needs to be called as a method on an object TcpWrapper.
 
-// Exercise 1: create the files socket-wrapper.h and socket-wrapper.cpp. The socket-wrapper.cpp must #include the header file, and must be added to the homework_4_exec_SOURCES in Makefile.am
+// Exercise 1: create the files socket-wrapper.h and socket-wrapper.cpp. 
+// The socket-wrapper.cpp must #include the header file, and must be added to the homework_4_exec_SOURCES in Makefile.am
 
 // Exercise 2: add the include guards to socket-wrapper.h
 

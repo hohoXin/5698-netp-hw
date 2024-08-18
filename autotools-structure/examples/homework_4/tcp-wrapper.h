@@ -10,13 +10,14 @@
 #define H_CHAT_SERVER
 
 #include <string>
+#include "socket-wrapper.h"
 
 constexpr size_t C_MTU = 512; /** <Chat MTU */
 
 /**
  * Class TcpWrapper
  */
-class TcpWrapper
+class TcpWrapper : public SocketWrapper
 {
 public:
   /**
@@ -41,7 +42,7 @@ public:
    * @param buf buffer where the received data is stored
    * @return number of bytes received (-1 if error occurred)
    */
-  int recvData(char* buf);
+  int recvData(char* buf) override;
 
   /**
    * Send data to remote host.
@@ -49,14 +50,19 @@ public:
    * @param size_to_tx size to transmit
    * @return number of bytes sent (-1 if error occurred)
    */
-  int sendData(const char* buf, size_t size_to_tx);
+  int sendData(const char* buf, size_t size_to_tx) override;
 
   /**
    * Function executed in a thread dispatched by the constructor 
    * to start the server listener
    */
-  void runServer();
-
+  void runServer() override;
+  
+  /**
+	 * Print relevant information to a stream
+	 * @param out an std::stream
+	 */
+  void print(std::ostream& out) const override;
 
 private:
   int m_port; /**< listen socket port number */

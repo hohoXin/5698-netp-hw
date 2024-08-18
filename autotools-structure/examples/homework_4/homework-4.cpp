@@ -10,6 +10,7 @@
 #include <tcp-wrapper.h>
 #include <signal.h>
 #include <string.h>
+#include <socket-wrapper.h>
 
 int
 main(int argc, char const *argv[])
@@ -24,6 +25,12 @@ main(int argc, char const *argv[])
   }
 
   TcpWrapper tcp_server {55555};
+
+  SocketWrapper* ptr_tcp {&tcp_server};
+
+  std::cout << *ptr_tcp << std::endl;
+
+  ptr_tcp->runServer();
 
   return 0;
 }

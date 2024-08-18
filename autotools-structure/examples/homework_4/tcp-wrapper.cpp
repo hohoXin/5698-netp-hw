@@ -218,3 +218,15 @@ TcpWrapper::sendData(const char* buf, size_t size_to_tx)
   }
   return sent_size;
 }
+
+
+void
+TcpWrapper::print(std::ostream& out) const
+{
+  out << "TCP relevant information:" << std::endl;
+  out << "1. listen socket port number: " << m_port << std::endl;
+  out << "2. address of who is connected: " << m_ip << std::endl;
+  out << "3. exit status: " << m_exit << std::endl;
+  out << "4. listener socket file descriptor: " << m_l_sock_fd << std::endl;
+  out << "5. data socket file descriptor: " << m_sock_fd << std::endl;
+}
