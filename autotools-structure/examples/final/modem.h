@@ -50,12 +50,14 @@ public:
    * @return the transmission power, in milliwatt
    */
   // Exercise 2: declare and implement a getTxPower method
+  unsigned int getTxPower() const;
 
   /**
    * get the bitrate power, in bps
    * @return the bitrate power, in bps
    */
   // Exercise 2: declare and implement a getBitrate method
+  unsigned int getBitrate() const;
   
   /**
    * get if the output is verbose or not

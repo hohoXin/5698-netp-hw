@@ -101,6 +101,7 @@ protected:
  * @param conn reference to the connector to be printed
  * @return the manipulated ostream object
  */
+ std::ostream& operator<<(std::ostream& out, const EthConn& conn);
 // Exercise 1 declare and implement the overloaded stream operator for EthConn, as 
 // described in the doxygen above.
 

@@ -25,10 +25,31 @@ connections_count(0)
   // TcpServerConnection, the handling of the case in which the socket is not 
   // created correctly, and its binding to any interface. The socket need to 
   // be stored in the member variable l_sock_fd
+  l_sock_fd = socket(AF_INET, SOCK_STREAM, 0);
+  if (l_sock_fd < 0){ 
+    std::cout << "ERROR: OPEN SOCKET" << std::endl;
+    close(l_sock_fd);
+    return;
+  }
+  if(!optionsAndBind()) {
+    std::cout << "ERROR: BIND" << std::endl;
+    close(l_sock_fd);
+    return;
+  }
 }
 
 // Exercise 4: Declare and implement the destructor for the TcpServerConnection class
 // It needs to properly dispose the sockets, if open
+TcpServerConnection::~TcpServerConnection()
+{
+	if(l_sock_fd >= 0) {
+		close(l_sock_fd);
+	}
+
+  if(sock_fd >= 0) {
+    close(sock_fd);
+  }
+}
 
 bool TcpServerConnection::optionsAndBind() 
 {
@@ -89,6 +110,11 @@ int TcpServerConnection::receive(std::shared_ptr<std::array<char,MTU>> buf)
     close(sock_fd);
     sock_fd = -1;
   }
+  else if(rcv_size == 0) {
+    std::cout << "Other endpoint has closed the socket" << std::endl;
+    close(sock_fd);
+    sock_fd = -1;
+  }
   return rcv_size;
 }
 
@@ -97,8 +123,25 @@ int TcpServerConnection::transmit(std::shared_ptr<std::array<char,MTU>> buf,
   size_t size_to_tx) 
 {
   // Exercise 5: implement this method, which has to perform the following operations:
-  // 1- send a UDP packet using sock_fd. The packet is the data field of the buf array.
+  // 1- send a TCP packet using sock_fd. The packet is the data field of the buf array.
   // 2- check if the send operation was successful, if not, closes the socket and returns a negative number
+  if(sock_fd < 0) {
+    return -1;
+  }
+  int send_size = send(sock_fd,buf->data(),size_to_tx,0);
+  if(send_size < 0) {
+    std::cout << "ERROR: SEND" << std::endl;
+    close(sock_fd);
+    sock_fd = -1;
+  }
+  return send_size;
 }
 
 // Exercise 1: implement the print() method for TcpServerConnection. It can print relevant info on the class.
+void TcpServerConnection::print(std::ostream& out) const
+{
+  out << "TcpServerConnection(localhost:" << std::to_string(port) 
+      << "), last host connected = " << ip 
+      << ", number of  connections so far = " 
+      << std::to_string(connections_count);
+}

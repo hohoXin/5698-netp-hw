@@ -76,6 +76,16 @@ bool Modem::parse(const std::string& configuration, bool& is_exit)
   // bitrate of the modem, only if the bitrate is a valid number >= 0. To this
   // aim, you can check the code of the SET_TX_POWER configuration.
 
+  if((begin = configuration.find(SET_BITRATE)) < configuration.size()) {
+    begin += SET_BITRATE.size();
+    
+    long int val = strtol(configuration.c_str()+begin,&end,10);
+    if(end != configuration.c_str()+begin && val >= 0) {
+      bitrate = val;
+      succeeded = true;
+    }
+  }
+
   
   if((begin = configuration.find(SET_VERBOSE)) < configuration.size()) {
     begin += SET_VERBOSE.size();
@@ -94,6 +104,15 @@ bool Modem::parse(const std::string& configuration, bool& is_exit)
 
 // Exercise 2: implement the getTxPower and getBitrate methods
 
+unsigned int Modem::getTxPower() const
+{
+  return tx_power;
+}
+
+unsigned int Modem::getBitrate() const
+{
+  return bitrate;
+}
 
 bool Modem::getVerbose() const
 {

@@ -28,6 +28,11 @@ public:
   // Exercise 4: declare and implement the destructor
 
   /**
+   * Class destructor.
+   */
+  virtual ~TcpServerConnection();
+
+  /**
    * Accept a new connection and store the IP.
    * @return false if accept fails
    */
@@ -50,6 +55,12 @@ public:
     size_t size_to_tx) override;
 
   // Exercise 1: declare and implement the print() method that overrides print() in EthConn
+
+  /**
+   * Print the Tcp server
+   * @param out a ostream
+   */
+  void print(std::ostream& out) const override;
 
 private:
   int l_sock_fd; /**< listener socket file descriptor */

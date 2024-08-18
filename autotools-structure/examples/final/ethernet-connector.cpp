@@ -27,3 +27,15 @@ port(port_num)
 }
 
 // Exercise 1: implement the overloaded stream operator and the print() method for EthConn
+
+void EthConn::print(std::ostream& out) const
+{
+  out << "EthConn port = " << std::to_string(port) 
+      << " ip = " << ip;
+}
+
+std::ostream& operator<<(std::ostream& out, const EthConn& conn) 
+{
+  conn.print(out);
+	return out;
+}
